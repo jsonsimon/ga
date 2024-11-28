@@ -9,7 +9,7 @@ table = soup.find('tbody')
 
 rows = table.find_all('tr')
 stats = []
-count = 0
+
 for row in rows:
 	cols = row.find_all('td')
 	d = {}
@@ -18,11 +18,19 @@ for row in rows:
 		txt = col.text
 		d[datastat] = txt
 	stats.append(d)
-	count = count+1
 
+
+team = input("Vilket lag vill du se? ")
 for statdict in stats:
 	if (statdict["score"] != ""):
-		print(statdict["home_team"], statdict["home_xg"], statdict["score"], statdict["away_xg"], statdict["away_team"])
+		if (statdict["home_team"] == team):
+			print(statdict["date"], statdict["home_team"], statdict["home_xg"], statdict["score"])
+
+print("--")
+for statdict in stats:
+	if (statdict["score"] != ""):
+		if (statdict["away_team"] == team):
+			print(statdict["date"], statdict["away_team"], statdict["away_xg"], statdict["score"])
 
 
 
