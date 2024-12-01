@@ -2,13 +2,13 @@ import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-round = 1
-while round < 4:
+round = 0
+while round <4:
 	sesstart = 2024-round
 	sesend = sesstart+1
 	sesinurl = str(sesstart)+"-"+str(sesend)
 
-	url = "https://fbref.com/en/comps/9/" +sesinurl+"/schedule/"+sesinurl+"-Premier-League-Scores-and-Fixtures"
+	url = "https://fbref.com/en/comps/9/{}/schedule/{}-Premier-League-Scores-and-Fixtures".format(sesinurl, sesinurl)
 
 	page = requests.get(url)
 
@@ -25,9 +25,10 @@ while round < 4:
 			datastat = col["data-stat"]
 			txt = col.text
 			d[datastat] = txt
-		stats.append(d)
+		if d["dayofweek"] != '':
+			stats.append(d)
 
 	df = pd.DataFrame(stats)
 
-	df.to_csv('table'+sesinurl+'.csv', index=False,)
+	df.to_csv('table'+sesinurl+'.csv', index=False)
 	round = round+1
