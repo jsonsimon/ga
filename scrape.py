@@ -3,7 +3,7 @@ import requests
 from bs4 import BeautifulSoup
 
 round = 0
-while round <4:
+while round < 4:
 	sesstart = 2024-round
 	sesend = sesstart+1
 	sesinurl = str(sesstart)+"-"+str(sesend)
