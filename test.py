@@ -1,36 +1,33 @@
+import pandas as pd
 import requests
 from bs4 import BeautifulSoup
 
-url = "https://fbref.com/en/comps/9/schedule/Premier-League-Scores-and-Fixtures"
-page = requests.get(url)
+round = 1
+while round < 4:
+	sesstart = 2024-round
+	sesend = sesstart+1
+	sesinurl = str(sesstart)+"-"+str(sesend)
 
-soup = BeautifulSoup(page.text, "html.parser")
-table = soup.find('tbody')
+	url = "https://fbref.com/en/comps/9/" +sesinurl+"/schedule/"+sesinurl+"-Premier-League-Scores-and-Fixtures"
 
-rows = table.find_all('tr')
-stats = []
+	page = requests.get(url)
 
-for row in rows:
-	cols = row.find_all('td')
-	d = {}
-	for col in cols:
-		datastat = col["data-stat"]
-		txt = col.text
-		d[datastat] = txt
-	stats.append(d)
+	soup = BeautifulSoup(page.text, "html.parser")
+	table = soup.find('tbody')
 
+	rows = table.find_all('tr')
+	stats = []
 
-team = input("Vilket lag vill du se? ")
-for statdict in stats:
-	if (statdict["score"] != ""):
-		if (statdict["home_team"] == team):
-			print(statdict["date"], statdict["home_team"], statdict["home_xg"], statdict["score"])
+	for row in rows:
+		cols = row.find_all('td')
+		d = {}
+		for col in cols:
+			datastat = col["data-stat"]
+			txt = col.text
+			d[datastat] = txt
+		stats.append(d)
 
-print("--")
-for statdict in stats:
-	if (statdict["score"] != ""):
-		if (statdict["away_team"] == team):
-			print(statdict["date"], statdict["away_team"], statdict["away_xg"], statdict["score"])
+	df = pd.DataFrame(stats)
 
-
-
+	df.to_csv('table'+sesinurl+'.csv', index=False,)
+	round = round+1
