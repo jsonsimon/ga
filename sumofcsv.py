@@ -7,6 +7,7 @@ manuloc = sumdf["score"].str.replace("–", "-") #html "-"" to math "-" to use e
 gd  = manuloc.apply(eval) 
 sumdf["attendance"] = sumdf["attendance"].str.replace(",", "") #removal of "," to make strings into ints
 sumdf["attendance"] = sumdf["attendance"].fillna(0) #switching of "NaN" to "0" to make strings into ints
+sumdf["date"] = pd.to_datetime(sumdf["date"]) #making date inte pandas date
 
 sumdf["gd"] = gd #add goal difference to dataframe
 
