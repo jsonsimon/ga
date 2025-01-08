@@ -94,5 +94,8 @@ for team in teams:
 	###
 
 sdf = pd.DataFrame(statdf) #making dataframe of statdict
+hxgavg = sumdf["home_xg"].sum()/len(sumdf["home_xg"])
+axgavg = sumdf["away_xg"].sum()/len(sumdf["away_xg"])
 
-sdf.to_csv("sumdftest.csv", index=False)
+
+#sdf.to_csv("sumdftest.csv", index=False)
