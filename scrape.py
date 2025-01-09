@@ -17,6 +17,7 @@ while round < 4:
 
 	rows = table.find_all('tr')
 	stats = []
+	week = []
 
 	for row in rows:
 		cols = row.find_all('td')
@@ -27,8 +28,18 @@ while round < 4:
 			d[datastat] = txt
 		if d["dayofweek"] != '':
 			stats.append(d)
-
+		cols2 = row.find_all('th')
+		for col2 in cols2:
+			gameweek = col2['data-stat']
+			d2 = {}
+			txt2 = col2.text
+			d2[gameweek] = txt2
+		if d2["gameweek"] != '':
+			week.append(d2)
+	df2 = pd.DataFrame(week)
+	
 	df = pd.DataFrame(stats)
+	df["matchweek"] = df2
 
 	df.to_csv('table'+sesinurl+'.csv', index=False)
 	round = round+1
