@@ -1,8 +1,12 @@
+from datetime import date
 import pandas as pd
 
 sumdf = pd.concat(map(pd.read_csv, ["table2021-2022.csv", "table2022-2023.csv", "table2023-2024.csv", "table2024-2025.csv"]), ignore_index=True) #import csvfiles
+sumdf2 = pd.concat(map(pd.read_csv, ["table2024-2025.csv"]), ignore_index=True) 
 
 sumdf = sumdf[sumdf["score"].notna()] #removal of games not yet played
+noplay = sumdf2[sumdf2["score"].isna()]
+sumdf2 = sumdf2[sumdf2["score"].notna()] #removal of games not yet played
 manuloc = sumdf["score"].str.replace("–", "-") #html "-"" to math "-" to use eval
 gd  = manuloc.apply(eval) 
 sumdf["attendance"] = sumdf["attendance"].str.replace(",", "") #removal of "," to make strings into ints
@@ -94,8 +98,14 @@ for team in teams:
 	###
 
 sdf = pd.DataFrame(statdf) #making dataframe of statdict
+
+#sdf.to_csv("sumdftest.csv", index=False)
+
 hxgavg = sumdf["home_xg"].sum()/len(sumdf["home_xg"])
 axgavg = sumdf["away_xg"].sum()/len(sumdf["away_xg"])
 
+next_matchweek = sumdf2["matchweek"].max() + 1
 
-#sdf.to_csv("sumdftest.csv", index=False)
+filtermatches = noplay[noplay["matchweek"] == next_matchweek]
+home = [filtermatches["home_team"]]
+away = [filtermatches["away_team"]]
